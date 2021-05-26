@@ -1,11 +1,16 @@
 <?xml version="1.0"?>
 <launch>
+
+	<arg name="hostname" value="$(env SMARTLINK_IP)" doc="hostname or IP of the rtsp camera" />
+    <arg name="port" default="8554" doc="port of the rtsp camera" />
+    <arg name="stream" default="camera/0" doc="name of the video stream published by the rtsp camera" />
+
    <!-- launch video stream -->
    <include file="$(find video_stream_opencv)/launch/camera.launch" >
    		<!-- node name and ros graph name -->
 	  	<arg name="camera_name" value="rtsp2" />
 	  	<!-- url of the video stream -->
-	  	<arg name="video_stream_provider" value="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov" />
+	  	<arg name="video_stream_provider" value="rtsp://$(arg hostname):$(arg port)/$(arg stream)" />
 	  	<!-- set camera fps to (does nothing on a stream)-->
 	  	<!-- <arg name="set_camera_fps" value="30"/> -->
       	<!-- set buffer queue size of frame capturing to -->
@@ -22,6 +27,6 @@
 	  	<!-- flip the image vertically -->
 	  	<arg name="flip_vertical" value="false" />
 	  	<!-- visualize on an image_view window the stream generated -->
-	  	<arg name="visualize" value="true" />
+	  	<arg name="visualize" value="false" />
    </include>
 </launch>
