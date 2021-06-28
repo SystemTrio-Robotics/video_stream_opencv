@@ -41,6 +41,8 @@
 #include <camera_info_manager/camera_info_manager.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/videoio/videoio.hpp>
+#include <opencv2/opencv.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sstream>
 #include <stdexcept>
@@ -238,7 +240,10 @@ virtual void subscribe() {
     cap->open(device_num);
   } catch (std::invalid_argument &ex) {
     NODELET_INFO_STREAM("Opening VideoCapture with provider: " << video_stream_provider);
-    cap->open(video_stream_provider);
+	if(!cap->open(video_stream_provider, cv::CAP_GSTREAMER)) 
+	{        
+	   std::cout << "Error opening video stream or file" << std::endl; 
+	} 
     if(video_stream_provider_type == "videofile" )
       {
         // We can only check the number of frames when we actually open the video file
